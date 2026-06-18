@@ -8,36 +8,54 @@ import { useEffect, useState } from "react";
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Resumind" },
-    { name: "description", content: "Smart feedback for your dream job!" },
+    {
+      name: "description",
+      content: "Smart feedback for your dream job!",
+    },
   ];
 }
 
 export default function Home() {
-  const { auth, kv } = usePuterStore();
+  const { auth, kv, isLoading } = usePuterStore();
   const navigate = useNavigate();
+
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loadingResumes, setLoadingResumes] = useState(false);
 
+  // Redirect unauthenticated users
   useEffect(() => {
-    if (!auth.isAuthenticated) navigate("/auth?next=/");
-  }, [auth.isAuthenticated]);
+    if (!isLoading && !auth.isAuthenticated) {
+      navigate("/auth?next=/");
+    }
+  }, [auth.isAuthenticated, isLoading, navigate]);
 
+  // Load resumes
   useEffect(() => {
+    if (!auth.isAuthenticated) return;
+
     const loadResumes = async () => {
-      setLoadingResumes(true);
+      try {
+        setLoadingResumes(true);
 
-      const resumes = (await kv.list("resume:*", true)) as KVItem[];
+        const items = (await kv.list("resume_*", true)) as KVItem[];
 
-      const parsedResumes = resumes?.map(
-        (resume) => JSON.parse(resume.value) as Resume,
-      );
+        console.log("KV List Result:", items);
 
-      setResumes(parsedResumes || []);
-      setLoadingResumes(false);
+        const parsedResumes =
+          items?.map((item) => JSON.parse(item.value) as Resume) || [];
+
+        console.log("Parsed Resumes:", parsedResumes);
+
+        setResumes(parsedResumes);
+      } catch (error) {
+        console.error("Error loading resumes:", error);
+      } finally {
+        setLoadingResumes(false);
+      }
     };
 
     loadResumes();
-  }, []);
+  }, [auth.isAuthenticated, kv]);
 
   return (
     <main className="bg-[url('/images/bg-main.svg')] bg-cover">
@@ -46,18 +64,26 @@ export default function Home() {
       <section className="main-section">
         <div className="page-heading py-16">
           <h1>Track Your Applications & Resume Ratings</h1>
-          {!loadingResumes && resumes?.length === 0 ? (
+
+          {!loadingResumes && resumes.length === 0 ? (
             <h2>No resumes found. Upload your first resume to get feedback.</h2>
           ) : (
             <h2>Review your submissions and check AI-powered feedback.</h2>
           )}
         </div>
+
+        {/* Loading */}
         {loadingResumes && (
           <div className="flex flex-col items-center justify-center">
-            <img src="/images/resume-scan-2.gif" className="w-[200px]" />
+            <img
+              src="/images/resume-scan-2.gif"
+              className="w-[200px]"
+              alt="Loading"
+            />
           </div>
         )}
 
+        {/* Resume Cards */}
         {!loadingResumes && resumes.length > 0 && (
           <div className="resumes-section">
             {resumes.map((resume) => (
@@ -66,7 +92,8 @@ export default function Home() {
           </div>
         )}
 
-        {!loadingResumes && resumes?.length === 0 && (
+        {/* Empty State */}
+        {!loadingResumes && resumes.length === 0 && (
           <div className="flex flex-col items-center justify-center mt-10 gap-4">
             <Link
               to="/upload"
