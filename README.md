@@ -1,85 +1,249 @@
-# Welcome to React Router!
+AI Resume Score Checker
 
-A modern, production-ready template for building full-stack React applications using React Router.
+AI Resume Score Checker is a web application that analyzes resumes against a given Job Description (JD) and provides AI-powered feedback, ATS compatibility scores, and actionable suggestions for improvement.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+Features
+Upload PDF resumes.
+Convert resumes into preview images.
+Analyze resumes using AI.
+Generate:
+Overall Resume Score
+ATS Score
+Content Score
+Structure Score
+Skills Score
+Tone & Style Score
+Display detailed improvement suggestions.
+Resume history dashboard.
+Resume preview with downloadable PDF.
+Persistent storage using Puter KV.
+User authentication via Puter.
+Tech Stack
+Frontend
+React
+TypeScript
+React Router
+Tailwind CSS
+Vite
+Storage & Backend Services
+Puter KV Store
+Puter File System (FS)
+Puter Authentication
+AI
+Puter AI Chat API
+PDF Processing
+pdfjs-dist
+Folder Structure
+app/
+│
+├── components/
+│   ├── Accordion.tsx
+│   ├── ATS.tsx
+│   ├── Details.tsx
+│   ├── FileUploader.tsx
+│   ├── Navbar.tsx
+│   ├── ResumeCard.tsx
+│   ├── ScoreBadge.tsx
+│   ├── ScoreCircle.tsx
+│   ├── Scoregage.tsx
+│   └── Summary.tsx
+│
+├── lib/
+│   ├── pdf2img.tsx
+│   ├── puter.ts
+│   └── utils.ts
+│
+├── routes/
+│   ├── auth.tsx
+│   ├── home.tsx
+│   ├── resume.tsx
+│   └── upload.tsx
+│
+├── constants/
+│   └── index.ts
+│
+├── app.css
+├── root.tsx
+└── routes.ts
+Workflow
+1. Upload Resume
 
-## Features
+User enters:
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+Company Name
+Job Title
+Job Description
+Resume PDF
 
-## Getting Started
+File is uploaded using:
 
-### Installation
+window.puter.fs.upload()
+2. PDF Conversion
 
-Install the dependencies:
+Resume PDF is converted into an image using:
 
-```bash
+pdfjs-dist
+
+This image is used for preview purposes.
+
+3. AI Analysis
+
+Prompt is generated using:
+
+prepareInstructions()
+
+AI evaluates:
+
+ATS compatibility
+Content quality
+Structure
+Skills match
+Tone & Style
+
+Response is returned as JSON.
+
+4. Save Data
+
+Resume information is stored inside Puter KV:
+
+resume_<uuid>
+
+Example:
+
+resume_a3fb2eea-0c0a-4c01-9de1-ec77f7a9d685
+
+Stored object:
+
+{
+  "id": "",
+  "companyName": "",
+  "jobTitle": "",
+  "jobDescription": "",
+  "resumePath": "",
+  "imagePath": "",
+  "feedback": {}
+}
+5. Dashboard
+
+Home page fetches all resumes:
+
+kv.list("resume_*", true)
+
+Displays:
+
+Resume cards
+Company name
+Job title
+Overall score
+Resume preview
+6. Resume Details Page
+
+Displays:
+
+Summary
+Overall score
+ATS score
+Content score
+Structure score
+Skills score
+Tone & Style score
+Detailed Suggestions
+
+Each category contains:
+
+{
+  "score": 55,
+  "tips": [
+    {
+      "type": "improve",
+      "tip": "",
+      "explanation": ""
+    }
+  ]
+}
+
+Categories:
+
+ATS
+Content
+Structure
+Skills
+Tone & Style
+Installation
+
+Clone repository:
+
+git clone <repo-url>
+
+Install dependencies:
+
 npm install
-```
 
-### Development
+Run development server:
 
-Start the development server with HMR:
-
-```bash
 npm run dev
-```
+Important Dependencies
+{
+  "react": "^19",
+  "typescript": "^5",
+  "vite": "^7",
+  "react-router": "^7",
+  "tailwindcss": "^4",
+  "pdfjs-dist": "^5.3.93"
+}
+Key Components
+FileUploader
 
-Your application will be available at `http://localhost:5173`.
+Handles PDF uploads.
 
-## Building for Production
+pdf2img.tsx
 
-Create a production build:
+Converts PDF to image using pdfjs-dist.
 
-```bash
-npm run build
-```
+upload.tsx
 
-## Deployment
+Responsible for:
 
-### Docker Deployment
+Uploading files
+Converting PDFs
+Calling AI
+Saving data to KV
+home.tsx
 
-To build and run using Docker:
+Displays all analyzed resumes.
 
-```bash
-docker build -t my-app .
+resume.tsx
 
-# Run the container
-docker run -p 3000:3000 my-app
-```
+Loads:
 
-The containerized application can be deployed to any platform that supports Docker, including:
+PDF
+Image preview
+Feedback data
+Summary.tsx
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
+Displays score breakdown.
 
-### DIY Deployment
+ATS.tsx
 
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
+Displays ATS suggestions and improvement tips.
 
-Make sure to deploy the output of `npm run build`
+Accordion.tsx
 
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
+Expandable suggestion cards.
 
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+Future Enhancements
+Resume templates.
+Download improved resume.
+Cover letter generator.
+LinkedIn profile analyzer.
+Resume comparison.
+Multi-page PDF preview.
+Export reports to PDF.
+AI resume rewriting.
+Job matching engine.
+Application tracker.
 
 
+AI Resume Score Checker
+
+Built with React + TypeScript + Puter AI + Tailwind CSS.
