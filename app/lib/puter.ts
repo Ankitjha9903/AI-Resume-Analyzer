@@ -20,6 +20,7 @@ declare global {
         readdir: (path: string) => Promise<FSItem[] | undefined>;
       };
       ai: {
+        feedback(arg0: { path: string; message: string }): unknown;
         chat: (
           prompt: string | ChatMessage[],
           imageURL?: string | PuterChatOptions,
@@ -350,7 +351,7 @@ export const usePuterStore = create<PuterStore>((set, get) => {
           ],
         },
       ],
-      { model: "claude-sonnet-4" },
+      { model: "claude-3-7sonnet" },
     ) as Promise<AIResponse | undefined>;
   };
 

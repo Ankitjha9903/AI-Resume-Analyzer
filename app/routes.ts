@@ -6,4 +6,5 @@ export default [
   // cast to any because a plain string path is not assignable to RouteConfigEntry
   // "routes/auth.tsx" as any
   route("/auth", "routes/auth.tsx"),
+  route("/upload", "routes/upload.tsx"),
 ] satisfies RouteConfig;
