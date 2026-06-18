@@ -36,7 +36,7 @@ type Feedback = {
 const SummaryComponent = Summary as ComponentType<{ feedback: Feedback }>;
 const ATSComponent = ATS as ComponentType<{
   score: number;
-  suggestions: string[];
+  suggestions: NonNullable<Feedback["ATS"]["tips"]>;
 }>;
 const DetailsComponent = Details as ComponentType<{ feedback: Feedback }>;
 
@@ -173,7 +173,7 @@ const Resume = () => {
                   <SummaryComponent feedback={feedback} />
                   <ATSComponent
                     score={feedback.ATS.score || 0}
-                    suggestions={feedback.ATS.tips?.map((tip) => tip.tip) || []}
+                    suggestions={feedback.ATS.tips || []}
                   />
                   {/* <DetailsComponent feedback={feedback} />
                   Overall Score: {feedback.overallScore} */}
