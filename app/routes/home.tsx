@@ -1,7 +1,5 @@
 import ResumeCard from "~/components/ResumeCard";
 import { resumes } from "../../constants";
-// import { resumes } from "../constants";
-// import { resumes } from "~/constants";
 import type { Route } from "./+types/home";
 import Navbar from "~/components/navbar";
 import { usePuterStore } from "~/lib/puter";

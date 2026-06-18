@@ -16,7 +16,7 @@ export const meta = () => [
 type Feedback = {
   ATS: {
     score?: number;
-    tips?: string[];
+    tips?: { type: "good" | "improve"; tip: string }[];
   };
   overallScore?: number;
   content?: {
@@ -164,7 +164,7 @@ const Resume = () => {
 
         {/* Feedback Section */}
         <section className="feedback-section">
-          <h2 className="text-4xl !text-black font-bold">Resume Review</h2>
+          {/* <h2 className="text-4xl !text-black font-bold">Resume Review</h2> */}
 
           {feedback ? (
             <div className="flex flex-col gap-8 animate-in fade-in-1000">
@@ -173,14 +173,14 @@ const Resume = () => {
                   <SummaryComponent feedback={feedback} />
                   <ATSComponent
                     score={feedback.ATS.score || 0}
-                    suggestions={feedback.ATS.tips || []}
+                    suggestions={feedback.ATS.tips?.map((tip) => tip.tip) || []}
                   />
-                  <DetailsComponent feedback={feedback} />
-                  Overall Score: {feedback.overallScore}
+                  {/* <DetailsComponent feedback={feedback} />
+                  Overall Score: {feedback.overallScore} */}
                 </h3>
               </div>
 
-              <div>
+              {/* <div>
                 <h3>ATS Score: {feedback.ATS?.score}</h3>
               </div>
 
@@ -194,11 +194,11 @@ const Resume = () => {
 
               <div>
                 <h3>Skills Score: {feedback.skills?.score}</h3>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <h3>Tone & Style Score: {feedback.toneAndStyle?.score}</h3>
-              </div>
+              </div> */}
             </div>
           ) : (
             <img
